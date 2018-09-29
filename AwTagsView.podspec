@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "AwTagsView"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
   s.summary      = "简易标签选择库"
 
   # This description is used to generate tags and improve search results.
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
 		一个高度自定义标签库
                    DESC
 
-  s.homepage     = "httpw://github.com/adampei/AwTagsView"
+  s.homepage     = "https://github.com/adampei/AwTagsView"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -80,7 +80,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/adampei/AwTagsView.git", :tag => "0.0.1" }
+  s.source       = { :git => "https://github.com/adampei/AwTagsView.git", :tag => "0.0.2" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
