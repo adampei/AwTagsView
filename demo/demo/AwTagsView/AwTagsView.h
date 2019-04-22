@@ -34,6 +34,8 @@
 @property (nonatomic, strong) UIColor *colorBgNormal;
 /** 选中状态背景色 */
 @property (nonatomic, strong) UIColor *colorBgSelected;
+/// 顶部 底部 预留margin 默认15
+@property(nonatomic, assign) CGFloat topMargin;
 /** 标题数组 */
 @property (nonatomic, strong) NSArray *arrTitles;
 
@@ -46,7 +48,7 @@
 
 /**
  设置默认选中的tag
-
+ 
  @param index 角标
  */
 - (void)awSetDefaultSelectedItemWithIndex:(NSInteger)index;

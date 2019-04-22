@@ -17,6 +17,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        self.topMargin = 15;
     }
     return self;
 }
@@ -28,13 +29,13 @@
 }
 
 - (void)initUI {
-
+    
     CGFloat screenWith = [UIScreen mainScreen].bounds.size.width;
     CGFloat leftRightMargin = self.cusLeftRightMargin ? self.cusLeftRightMargin : 15;// 左右两侧距离边
     CGFloat x = leftRightMargin; // x初始值
     CGFloat margin = self.cusMargin ? self.cusMargin : 15; // item左右间距
     CGFloat height = self.cusItemHeight ? self.cusItemHeight : 24; // item 高度
-    CGFloat y = 15; // y初始值
+    CGFloat y = self.topMargin; // y初始值
     for (int i = 0; i < _arrTitles.count; i++) {
         UILabel * lbl = [UILabel new];
         lbl.textAlignment = NSTextAlignmentNatural;
@@ -78,7 +79,7 @@
     }
     
     if (self.awHeightCallback) {
-        self.awHeightCallback(y + margin + height);
+        self.awHeightCallback(y + self.topMargin + height);
     }
 }
 
