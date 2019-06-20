@@ -16,6 +16,10 @@
 @property (nonatomic, assign) CGFloat cusMargin;
 /** 标签高度默认24 */
 @property (nonatomic, assign) CGFloat cusItemHeight;
+/// 如若有icon 则为icon的高度 高度 = 宽度 默认 = cusItemHeight
+@property (nonatomic, assign) CGFloat cusIconHeight;
+/// 文字与图片间距 默认5
+@property (nonatomic, assign) CGFloat cusInterSpacingOfIconContent;
 /** 字体大小 默认12 */
 @property (nonatomic, assign) CGFloat cusFont;
 /** 圆角大小默认是0 */
@@ -36,8 +40,12 @@
 @property (nonatomic, strong) UIColor *colorBgSelected;
 /// 顶部 底部 预留margin 默认15
 @property(nonatomic, assign) CGFloat topMargin;
-/** 标题数组 */
+
+/** 初始化方法 */
 @property (nonatomic, strong) NSArray *arrTitles;
+
+/// 图片名称数组 如果有图片的话则每个label前方加上一个icon
+@property (nonatomic, strong) NSMutableArray * arrImgs;
 
 /**
  选中item的回调
@@ -52,6 +60,9 @@
  @param index 角标
  */
 - (void)awSetDefaultSelectedItemWithIndex:(NSInteger)index;
+
+/// 开始创建 最后调用
+- (void)x_Start;
 
 @end
 

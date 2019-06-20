@@ -34,9 +34,20 @@
         weakView.frame = CGRectMake(0, 100, [UIScreen mainScreen].bounds.size.width, height);
     }];
     
-    awView.arrTitles = @[@"你好", @"大师傅你好", @"你啊好", @"你阿道夫好", @"你打发爱得深沉好"];
+    [awView setAwClickItemCallback:^(NSString *strSelectedItem, NSInteger index) {
+        NSLog(@"点击了%@, 第%ld个", strSelectedItem, (long)index);
+    }];
     
+    awView.arrTitles = @[@"你好", @"大师傅你好", @"你啊好", @"你阿道夫好", @"你打发爱得深沉好"];
+    // sun
+    NSMutableArray *arrImages = @[].mutableCopy;
+    for (int i = 0; i<awView.arrTitles.count; i++) {
+        [arrImages addObject:@"sun"];
+    }
+    /// 带icon的
+    awView.arrImgs = arrImages;
     awView.backgroundColor = [UIColor orangeColor];
+    [awView x_Start];
     [self.view addSubview:awView];}
 
 

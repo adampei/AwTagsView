@@ -9,8 +9,14 @@
 #import "AwTagsView.h"
 
 @interface AwTagsView ()
+
+/// 当前选中的
 @property (nonatomic, strong) UILabel * lblSelected;
+/// lable数组
 @property (nonatomic, strong) NSMutableArray *arrTags;
+/// 图片数组
+@property (nonatomic, strong) NSMutableArray * arrIcons;
+
 @end
 
 @implementation AwTagsView
@@ -22,14 +28,82 @@
     return self;
 }
 
-- (void)setArrTitles:(NSArray *)arrTitles {
-    _arrTitles = arrTitles;
-    _arrTags = @[].mutableCopy;
+/// 开始创建
+-(void)x_Start {
     [self initUI];
 }
 
 - (void)initUI {
     
+    if (self.arrImgs.count != 0 && self.arrImgs.count != self.arrTitles.count) {
+        NSAssert(0, @"图片数组与内容数组对不上");
+        return;
+    }
+    
+    if (self.arrImgs.count == 0) {
+        /// 无icon的初始化方式
+        [self initWithNoIcon];
+    } else {
+        /// 带有icon的初始化方式
+        [self initWithIcon];
+    }
+    
+}
+
+/// 有icon的初始化方式
+- (void)initWithIcon {
+    
+    CGFloat screenWith = [UIScreen mainScreen].bounds.size.width;
+    CGFloat leftRightMargin = self.cusLeftRightMargin ? self.cusLeftRightMargin : 15;// 左右两侧距离边
+    CGFloat xIcon = leftRightMargin; // x初始值
+    CGFloat margin = self.cusMargin ? self.cusMargin : 15; // item左右间距默认15
+    CGFloat heightLbl = self.cusItemHeight ? self.cusItemHeight : 24; // item 高度
+    CGFloat yIcon = self.topMargin; // y初始值
+    
+    // icon 与 label间距
+    CGFloat spacing = self.cusInterSpacingOfIconContent ? self.cusInterSpacingOfIconContent : 5;
+    
+    // icon的宽高
+    CGFloat iconH = self.cusIconHeight ? self.cusIconHeight : heightLbl;
+    
+    for (int i = 0; i < _arrTitles.count; i++) {
+        
+        /// 初始化icon
+        UIImageView *imgView = [self x_CreateImageViewIconWithImageName:self.arrImgs[i]];
+        imgView.bounds = CGRectMake(0, 0, iconH, iconH);
+        
+        // 初始化label
+        UILabel * lbl = [self x_CreateLabelWithIndex:i];
+        // 计算lable宽度
+        CGFloat wLabel = [self getLabelWidthtWithHeight:heightLbl andLabelFont:[self x_GetFont] withText:lbl.text];
+        // 判断剩余宽度是否可以放下label
+        if (screenWith - leftRightMargin - xIcon - (wLabel + iconH + spacing) >= 0) {
+            // 不换行
+            imgView.frame = CGRectMake(xIcon, yIcon, iconH, iconH);
+            lbl.frame = CGRectMake(CGRectGetMaxX(imgView.frame)+spacing, yIcon, wLabel, heightLbl);
+            
+            // 计算出下一个icon的x坐标
+            xIcon = xIcon + wLabel + margin + iconH + spacing;
+        }else{
+            // 换行
+            xIcon = leftRightMargin;
+            yIcon = yIcon + heightLbl + margin;
+            if (wLabel > screenWith - 2 * leftRightMargin){
+                // 如果很宽很宽很宽则展示一行
+                wLabel = screenWith - 2 * leftRightMargin;
+            }
+            imgView.frame = CGRectMake(xIcon, yIcon, iconH, iconH);
+            lbl.frame = CGRectMake(CGRectGetMaxX(imgView.frame)+spacing, yIcon, wLabel, heightLbl);
+            xIcon = xIcon + wLabel + margin + spacing + iconH;
+        }
+    }
+    if (self.awHeightCallback) {
+        self.awHeightCallback(yIcon + self.topMargin + heightLbl);
+    }
+}
+
+/// 无icon的初始化方式
+- (void)initWithNoIcon {
     CGFloat screenWith = [UIScreen mainScreen].bounds.size.width;
     CGFloat leftRightMargin = self.cusLeftRightMargin ? self.cusLeftRightMargin : 15;// 左右两侧距离边
     CGFloat x = leftRightMargin; // x初始值
@@ -37,28 +111,11 @@
     CGFloat height = self.cusItemHeight ? self.cusItemHeight : 24; // item 高度
     CGFloat y = self.topMargin; // y初始值
     for (int i = 0; i < _arrTitles.count; i++) {
-        UILabel * lbl = [UILabel new];
-        lbl.textAlignment = NSTextAlignmentNatural;
-        [self addSubview:lbl];
-        [_arrTags addObject:lbl];
-        lbl.tag = i;
-        lbl.backgroundColor = self.colorBgNormal ? self.colorBgNormal : [UIColor yellowColor];
         
-        lbl.font = [UIFont systemFontOfSize:self.cusFont ? self.cusFont : 12];
-        // 两边添加俩空格 不至于字都挨着边框
-        lbl.text = [NSString stringWithFormat:@"  %@  ",_arrTitles[i]];
-        lbl.textColor = self.colorNormal ? self.colorNormal : [UIColor blackColor];
-        
-        lbl.layer.cornerRadius = self.cornerRadius;
-        lbl.layer.masksToBounds = YES;
-        lbl.layer.borderColor = self.colorBorderNormal ? self.colorBorderNormal.CGColor : [UIColor blackColor].CGColor;
-        lbl.layer.borderWidth = self.cusBorderWidth;
-        
-        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickTagItem:)];
-        lbl.userInteractionEnabled = YES;
-        [lbl addGestureRecognizer:tap];
-        
-        CGFloat w = [self getLabelWidthtWithHeight:24 andLabelFont:12 withText:lbl.text];
+        // 初始化label
+        UILabel * lbl = [self x_CreateLabelWithIndex:i];
+        // 计算lable宽度
+        CGFloat w = [self getLabelWidthtWithHeight:height andLabelFont:[self x_GetFont] withText:lbl.text];
         // 判断剩余宽度是否可以放下label
         if (screenWith - leftRightMargin - x - w >= 0) {
             // 不换行
@@ -77,10 +134,50 @@
             x = x + w + margin;
         }
     }
-    
     if (self.awHeightCallback) {
         self.awHeightCallback(y + self.topMargin + height);
     }
+}
+
+/// 初始化image
+- (UIImageView *)x_CreateImageViewIconWithImageName:(NSString *)imageName {
+    
+    UIImageView *imgView = [UIImageView new];
+    imgView.image = [UIImage imageNamed:imageName];
+    [self addSubview:imgView];
+    return imgView;
+}
+
+/// 初始化label
+- (UILabel *)x_CreateLabelWithIndex:(NSInteger)idx {
+    
+    UILabel * lbl = [UILabel new];
+    lbl.textAlignment = NSTextAlignmentNatural;
+    [self addSubview:lbl];
+    [self.arrTags addObject:lbl];
+    lbl.tag = idx;
+    lbl.backgroundColor = self.colorBgNormal ? self.colorBgNormal : [UIColor yellowColor];
+    
+    lbl.font = [UIFont systemFontOfSize:[self x_GetFont]];
+    // 两边添加俩空格 不至于字都挨着边框
+    lbl.text = [NSString stringWithFormat:@"  %@  ",_arrTitles[idx]];
+    lbl.textColor = self.colorNormal ? self.colorNormal : [UIColor blackColor];
+    
+    lbl.layer.cornerRadius = self.cornerRadius;
+    lbl.layer.masksToBounds = YES;
+    lbl.layer.borderColor = self.colorBorderNormal ? self.colorBorderNormal.CGColor : [UIColor blackColor].CGColor;
+    lbl.layer.borderWidth = self.cusBorderWidth;
+    
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickTagItem:)];
+    lbl.userInteractionEnabled = YES;
+    [lbl addGestureRecognizer:tap];
+    return lbl;
+}
+
+// 获取font
+- (CGFloat)x_GetFont {
+    
+    return self.cusFont ? self.cusFont : 12;
 }
 
 #pragma mark - events
@@ -105,7 +202,8 @@
     }
     
     if (self.awClickItemCallback) {
-        self.awClickItemCallback(lbl.text, lbl.tag);
+        NSString * s = [lbl.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+        self.awClickItemCallback(s, lbl.tag);
     }
 }
 
@@ -126,4 +224,21 @@
     CGSize size = [text boundingRectWithSize:CGSizeMake(MAXFLOAT, height) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:font]} context:nil].size;
     return size.width;
 }
+
+- (NSMutableArray *)arrTags {
+    
+    if (!_arrTags) {
+        _arrTags = @[].mutableCopy;
+    }
+    return _arrTags;
+}
+
+- (NSMutableArray *)arrIcons {
+    
+    if (!_arrIcons) {
+        _arrIcons = @[].mutableCopy;
+    }
+    return _arrIcons;
+}
+
 @end
