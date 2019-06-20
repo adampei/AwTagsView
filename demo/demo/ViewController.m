@@ -25,7 +25,7 @@
     awView.colorBgNormal = [UIColor redColor];
     awView.colorBgSelected = [UIColor redColor];
     awView.cusIconHeight = 12;
-    awView.cusInterSpacingOfIconContent = 0;
+    awView.cusInterSpacingOfIconContent = 0.1;
     
     awView.colorBorderNormal = [UIColor redColor];
     /// 标签顶部 底部距离父view的距离
