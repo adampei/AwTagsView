@@ -24,6 +24,8 @@
     
     awView.colorBgNormal = [UIColor redColor];
     awView.colorBgSelected = [UIColor redColor];
+    awView.cusIconHeight = 12;
+    awView.cusInterSpacingOfIconContent = 0;
     
     awView.colorBorderNormal = [UIColor redColor];
     /// 标签顶部 底部距离父view的距离
@@ -31,14 +33,14 @@
     awView.cusBorderWidth = 0;
     __weak __typeof(awView)weakView = awView;
     [awView setAwHeightCallback:^(CGFloat height) {
-        weakView.frame = CGRectMake(0, 100, [UIScreen mainScreen].bounds.size.width, height);
+        weakView.frame = CGRectMake(0, 100, [UIScreen mainScreen].bounds.size.width*0.5, height);
     }];
     
     [awView setAwClickItemCallback:^(NSString *strSelectedItem, NSInteger index) {
         NSLog(@"点击了%@, 第%ld个", strSelectedItem, (long)index);
     }];
     
-    awView.arrTitles = @[@"你好", @"大师傅你好", @"你啊好", @"你阿道夫好", @"你打发爱得深沉好"];
+    awView.arrTitles = @[@"你好", @"大师好", @"你啊好", @"你", @"你", @"你", @"你", @"你打发爱得深沉好"];
     // sun
     NSMutableArray *arrImages = @[].mutableCopy;
     for (int i = 0; i<awView.arrTitles.count; i++) {
@@ -48,7 +50,9 @@
     awView.arrImgs = arrImages;
     awView.backgroundColor = [UIColor orangeColor];
     [awView x_Start];
-    [self.view addSubview:awView];}
+    [self.view addSubview:awView];
+    
+}
 
 
 - (void)didReceiveMemoryWarning {

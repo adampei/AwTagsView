@@ -42,18 +42,18 @@
     
     if (self.arrImgs.count == 0) {
         /// 无icon的初始化方式
-        [self initWithNoIcon];
+        [self initWithNoIconIsAvailabel:NO];
     } else {
         /// 带有icon的初始化方式
-        [self initWithIcon];
+        [self initWithIconIsAvaiable:NO];
     }
     
 }
 
 /// 有icon的初始化方式
-- (void)initWithIcon {
+- (void)initWithIconIsAvaiable:(BOOL) isAvailabel{
     
-    CGFloat screenWith = [UIScreen mainScreen].bounds.size.width;
+    CGFloat screenWith = self.bounds.size.width;
     CGFloat leftRightMargin = self.cusLeftRightMargin ? self.cusLeftRightMargin : 15;// 左右两侧距离边
     CGFloat xIcon = leftRightMargin; // x初始值
     CGFloat margin = self.cusMargin ? self.cusMargin : 15; // item左右间距默认15
@@ -69,17 +69,29 @@
     for (int i = 0; i < _arrTitles.count; i++) {
         
         /// 初始化icon
-        UIImageView *imgView = [self x_CreateImageViewIconWithImageName:self.arrImgs[i]];
+        
+        UIImageView *imgView = nil;
+        if (isAvailabel) {
+            imgView = self.arrIcons[i];
+        } else {
+            imgView = [self x_CreateImageViewIconWithImageName:self.arrImgs[i]];
+        }
         imgView.bounds = CGRectMake(0, 0, iconH, iconH);
+        [self.arrIcons addObject:imgView];
         
         // 初始化label
-        UILabel * lbl = [self x_CreateLabelWithIndex:i];
+        UILabel * lbl = nil;
+        if (isAvailabel) {
+            lbl = self.arrTags[i];
+        } else {
+            lbl = [self x_CreateLabelWithIndex:i];
+        }
         // 计算lable宽度
         CGFloat wLabel = [self getLabelWidthtWithHeight:heightLbl andLabelFont:[self x_GetFont] withText:lbl.text];
         // 判断剩余宽度是否可以放下label
         if (screenWith - leftRightMargin - xIcon - (wLabel + iconH + spacing) >= 0) {
             // 不换行
-            imgView.frame = CGRectMake(xIcon, yIcon, iconH, iconH);
+            imgView.frame = CGRectMake(xIcon, yIcon + (heightLbl - iconH)*0.5, iconH, iconH);
             lbl.frame = CGRectMake(CGRectGetMaxX(imgView.frame)+spacing, yIcon, wLabel, heightLbl);
             
             // 计算出下一个icon的x坐标
@@ -92,7 +104,7 @@
                 // 如果很宽很宽很宽则展示一行
                 wLabel = screenWith - 2 * leftRightMargin;
             }
-            imgView.frame = CGRectMake(xIcon, yIcon, iconH, iconH);
+            imgView.frame = CGRectMake(xIcon, yIcon + (heightLbl - iconH)*0.5, iconH, iconH);
             lbl.frame = CGRectMake(CGRectGetMaxX(imgView.frame)+spacing, yIcon, wLabel, heightLbl);
             xIcon = xIcon + wLabel + margin + spacing + iconH;
         }
@@ -103,8 +115,8 @@
 }
 
 /// 无icon的初始化方式
-- (void)initWithNoIcon {
-    CGFloat screenWith = [UIScreen mainScreen].bounds.size.width;
+- (void)initWithNoIconIsAvailabel:(BOOL)isAvailable {
+    CGFloat screenWith = self.bounds.size.width;
     CGFloat leftRightMargin = self.cusLeftRightMargin ? self.cusLeftRightMargin : 15;// 左右两侧距离边
     CGFloat x = leftRightMargin; // x初始值
     CGFloat margin = self.cusMargin ? self.cusMargin : 15; // item左右间距
@@ -113,7 +125,12 @@
     for (int i = 0; i < _arrTitles.count; i++) {
         
         // 初始化label
-        UILabel * lbl = [self x_CreateLabelWithIndex:i];
+        UILabel * lbl = nil;
+        if (isAvailable) {
+            lbl = self.arrTags[i];
+        } else {
+            lbl = [self x_CreateLabelWithIndex:i];
+        }
         // 计算lable宽度
         CGFloat w = [self getLabelWidthtWithHeight:height andLabelFont:[self x_GetFont] withText:lbl.text];
         // 判断剩余宽度是否可以放下label
@@ -178,6 +195,16 @@
 - (CGFloat)x_GetFont {
     
     return self.cusFont ? self.cusFont : 12;
+}
+
+- (void)layoutSubviews {
+    
+    NSLog(@"重新布局");
+    if (self.arrImgs && self.arrImgs.count >0 && self.arrImgs.count == self.arrTitles.count) {
+        [self initWithIconIsAvaiable:YES];
+    } else {
+        [self initWithNoIconIsAvailabel:YES];
+    }
 }
 
 #pragma mark - events
