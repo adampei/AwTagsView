@@ -44,14 +44,14 @@
         NSLog(@"点击了%@, 第%ld个", strSelectedItem, (long)index);
     }];
     
-    awView.arrTitles = @[@"你好", @"大师好", @"你啊好", @"你", @"你", @"你", @"你", @"你打发爱得深沉好"];
+    awView.arrTitles = @[@"你好", @"大师好", @"你啊好", @"阿斯蒂芬你", @"你水电费", @"adsf你", @"你", @"你打发爱得深沉好", @"来设计老司机"];
     // sun
     NSMutableArray *arrImages = @[].mutableCopy;
     for (int i = 0; i<awView.arrTitles.count; i++) {
         [arrImages addObject:@"sun"];
     }
     /// 带icon的
-    awView.arrImgs = arrImages;
+//    awView.arrImgs = arrImages;
     awView.backgroundColor = [UIColor orangeColor];
     [awView x_Start];
     [self.view addSubview:awView];

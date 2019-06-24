@@ -99,7 +99,7 @@
             lbl.frame = CGRectMake(CGRectGetMaxX(imgView.frame)+spacing, yIcon, wLabel, heightLbl);
             
             // 计算出下一个icon的x坐标
-            xIcon = xIcon + wLabel + margin + iconH + spacing;
+            xIcon = CGRectGetMaxX(lbl.frame) + margin;
         }else{
             // 换行
             xIcon = leftRightMargin;
@@ -110,7 +110,7 @@
             }
             imgView.frame = CGRectMake(xIcon, yIcon + (heightLbl - iconH)*0.5, iconH, iconH);
             lbl.frame = CGRectMake(CGRectGetMaxX(imgView.frame)+spacing, yIcon, wLabel, heightLbl);
-            xIcon = xIcon + wLabel + margin + spacing + iconH;
+            xIcon = CGRectGetMaxX(lbl.frame) + margin;
         }
     }
     if (self.awHeightCallback) {
@@ -144,7 +144,7 @@
             // 不换行
             lbl.frame = CGRectMake(x, y, w, height);
             // 计算出下一个lable的x坐标
-            x = x + w + margin;
+            x = CGRectGetMaxX(lbl.frame) + margin;
         }else{
             // 换行
             x = leftRightMargin;
@@ -154,7 +154,7 @@
                 w = screenWith - 2 * leftRightMargin;
             }
             lbl.frame = CGRectMake(x, y, w, height);
-            x = x + w + margin;
+            x = CGRectGetMaxX(lbl.frame) + margin;
         }
     }
     if (self.awHeightCallback) {
