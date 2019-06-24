@@ -17,7 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    AwTagsView * awView = [[AwTagsView alloc] initWithFrame:CGRectMake(0, 100, [UIScreen mainScreen].bounds.size.width, 0)];
+    AwTagsView * awView = [[AwTagsView alloc] initWithFrame:CGRectZero];
     awView.cornerRadius = 5;
     awView.colorNormal = [UIColor whiteColor];
     awView.colorSelected = [UIColor whiteColor];
@@ -26,6 +26,10 @@
     awView.colorBgSelected = [UIColor redColor];
     awView.cusIconHeight = 12;
     awView.cusInterSpacingOfIconContent = 0.1;
+    
+    awView.cusMargin = 5;
+    awView.lineSpacing = 15;
+//    awView.isBlank = NO;
     
     awView.colorBorderNormal = [UIColor redColor];
     /// 标签顶部 底部距离父view的距离

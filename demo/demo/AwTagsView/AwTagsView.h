@@ -14,6 +14,10 @@
 @property (nonatomic, assign) CGFloat cusLeftRightMargin;
 /** tag之间的间距默认15 */
 @property (nonatomic, assign) CGFloat cusMargin;
+/// tag上下距离
+@property (nonatomic, assign) CGFloat lineSpacing;
+/// 是否有空格
+@property (nonatomic, assign) BOOL isBlank;
 /** 标签高度默认24 */
 @property (nonatomic, assign) CGFloat cusItemHeight;
 /// 如若有icon 则为icon的高度 高度 = 宽度 默认 = cusItemHeight

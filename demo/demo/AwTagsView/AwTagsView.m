@@ -24,6 +24,8 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.topMargin = 15;
+        /// 默认是有空格的
+        self.isBlank = YES;
     }
     return self;
 }
@@ -57,6 +59,8 @@
     CGFloat leftRightMargin = self.cusLeftRightMargin ? self.cusLeftRightMargin : 15;// 左右两侧距离边
     CGFloat xIcon = leftRightMargin; // x初始值
     CGFloat margin = self.cusMargin ? self.cusMargin : 15; // item左右间距默认15
+    // item上下距离
+    CGFloat marginLineSpacin = self.lineSpacing ? self.lineSpacing : 5;
     CGFloat heightLbl = self.cusItemHeight ? self.cusItemHeight : 24; // item 高度
     CGFloat yIcon = self.topMargin; // y初始值
     
@@ -99,7 +103,7 @@
         }else{
             // 换行
             xIcon = leftRightMargin;
-            yIcon = yIcon + heightLbl + margin;
+            yIcon = yIcon + heightLbl + marginLineSpacin;
             if (wLabel > screenWith - 2 * leftRightMargin){
                 // 如果很宽很宽很宽则展示一行
                 wLabel = screenWith - 2 * leftRightMargin;
@@ -120,6 +124,8 @@
     CGFloat leftRightMargin = self.cusLeftRightMargin ? self.cusLeftRightMargin : 15;// 左右两侧距离边
     CGFloat x = leftRightMargin; // x初始值
     CGFloat margin = self.cusMargin ? self.cusMargin : 15; // item左右间距
+    // item上下距离
+    CGFloat marginLineSpacin = self.lineSpacing ? self.lineSpacing : 5;
     CGFloat height = self.cusItemHeight ? self.cusItemHeight : 24; // item 高度
     CGFloat y = self.topMargin; // y初始值
     for (int i = 0; i < _arrTitles.count; i++) {
@@ -142,7 +148,7 @@
         }else{
             // 换行
             x = leftRightMargin;
-            y = y + height + margin;
+            y = y + height + marginLineSpacin;
             if (w > screenWith - 2 * leftRightMargin){
                 // 如果很宽很宽很宽则展示一行得了
                 w = screenWith - 2 * leftRightMargin;
@@ -177,7 +183,7 @@
     
     lbl.font = [UIFont systemFontOfSize:[self x_GetFont]];
     // 两边添加俩空格 不至于字都挨着边框
-    lbl.text = [NSString stringWithFormat:@"  %@  ",_arrTitles[idx]];
+    lbl.text = self.isBlank ? [NSString stringWithFormat:@"  %@  ",_arrTitles[idx]] : _arrTitles[idx];
     lbl.textColor = self.colorNormal ? self.colorNormal : [UIColor blackColor];
     
     lbl.layer.cornerRadius = self.cornerRadius;
