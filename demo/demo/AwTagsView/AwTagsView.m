@@ -37,6 +37,14 @@
 
 - (void)initUI {
     
+    for (UIView *sbView in self.subviews) {
+        [sbView removeFromSuperview];
+        [self.arrTags removeAllObjects];
+        [self.arrIcons removeAllObjects];
+        self.arrIcons = nil;
+        self.arrTags = nil;
+    }
+    
     if (self.arrImgs.count != 0 && self.arrImgs.count != self.arrTitles.count) {
         NSAssert(0, @"图片数组与内容数组对不上");
         return;
